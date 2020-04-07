@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace HealkitMod
+{
+    public class HealkitException : Exception
+    {
+        public string m_uniqueData;
+
+        public HealkitException(string info, Exception inner) : base(info, inner)
+        { }
+    }
+}
