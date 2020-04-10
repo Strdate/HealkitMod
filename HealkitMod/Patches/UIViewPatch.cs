@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HealkitMod
+namespace HealkitMod.Patches
 {
     [HarmonyPatch(typeof(UIView))]
     [HarmonyPatch("HandleException")]
@@ -16,19 +16,29 @@ namespace HealkitMod
             UIComponent uicomponent = UIView.library.Get("ExceptionPanel");
             if (uicomponent != null && UIView.GetModalComponent() != uicomponent)
             {
+                if(exception == null)
+                {
+                    return ModInfo.sb_SuppressAllExceptions.value ? false : true;
+                }
                 var template = ExceptionTemplate.RegisterException(exception);
                 template.RaisedCount++;
-                if (!template.Suppressed)
+                if (!template.Suppressed && !ModInfo.sb_SuppressAllExceptions.value)
                 {
-                    ExceptionPanelExt.instance.m_chbSuppressThis.isVisible = true;
                     ExceptionPanelExt.instance.m_chbSuppressThis.isChecked = false;
                     message = message ?? "";
-                    if(exception is HealkitException)
+                    HealkitException hke = exception as HealkitException;
+                    if(hke != null)
                     {
                         message += exception.Message + "\n\n" + exception.InnerException.ToString().Replace('&', '+');
+                        if(hke.m_supperessMsg != null)
+                        {
+                            ExceptionPanelExt.instance.m_chbSuppressThis.isVisible = true;
+                            ExceptionPanelExt.instance.m_chbSuppressThis.tooltip = hke.m_supperessMsg;
+                        }
                     }
                     else
                     {
+                        ExceptionPanelExt.instance.m_chbSuppressThis.isVisible = false;
                         message += exception.ToString().Replace('&', '+');
                     }
                     exception = null;
@@ -53,7 +63,10 @@ namespace HealkitMod
         static bool Prefix(Queue<Exception> ___sLastException)
         {
             Exception e = ___sLastException.Peek();
-            ExceptionTemplate.RegisterException(e).Suppressed = ExceptionPanelExt.instance.m_chbSuppressThis.isChecked;
+            if(e != null)
+            {
+                ExceptionTemplate.RegisterException(e).Suppressed = ExceptionPanelExt.instance.m_chbSuppressThis.isChecked;
+            }
             ExceptionPanelExt.instance.m_chbSuppressThis.isVisible = false;
             return true;
         }

@@ -3,6 +3,7 @@ using ICities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -17,18 +18,12 @@ namespace HealkitMod
 
         public void OnLevelLoaded(LoadMode mode)
         {
-            BuildingAIPatch.Patch();
-            NetAIPatch.Patch();
-            TransportLinePatch.Patch();
-            VehicleAIPatch.Patch();
+            ModInfo.Harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
         public void OnLevelUnloading()
         {
-            VehicleAIPatch.Unpatch();
-            TransportLinePatch.Unpatch();
-            NetAIPatch.Unpatch();
-            BuildingAIPatch.Unpatch();
+            
         }
 
         public void OnReleased()

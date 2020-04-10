@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace HealkitMod
+namespace HealkitMod.Patches
 {
     public class ThreadingWrapperExceptionHandler
     {
@@ -52,9 +52,10 @@ namespace HealkitMod
                 { }
             }
 
-            string info = $"An error has occured in mod's {method} method.\nMod name: {modName ?? "<Unknown>"}\nAssembly: {assembly.FullName}";
+            string info = $"An error has occured in mod's {method} method.\nMod name: {modName ?? "<Unknown>"}\nAssembly: {assembly.FullName}\nSeverity: Medium";
             HealkitException e2 = new HealkitException(info, e);
             e2.m_uniqueData = modName;
+            e2.m_supperessMsg = "Suppress similar exceptions caused by this mod";
             UIView.ForwardException(e2);
         }
     }

@@ -18,13 +18,22 @@ namespace HealkitMod
             Exception = e;
         }
 
+        public static void ResetSuppressing()
+        {
+            foreach(var templatePair in templates)
+            {
+                templatePair.Value.Suppressed = false;
+            }
+        }
+
         public static ExceptionTemplate RegisterException(Exception e)
         {
             ExceptionTemplate val;
             int hash = GetExceptionHash(e);
             if(!templates.TryGetValue(hash,out val))
             {
-                templates.Add(hash,new ExceptionTemplate(e));
+                val = new ExceptionTemplate(e);
+                templates.Add(hash,val);
             }
             return val;
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HealkitMod
 {
-    public class HealkitMod
+    /*public class HealkitMod
     {
         private static HealkitMod _instance;
         public static HealkitMod instance { get
@@ -17,5 +17,5 @@ namespace HealkitMod
                 return _instance;
             }
         }
-    }
+    }*/
 }
