@@ -17,7 +17,7 @@ namespace HealkitMod
 
         public string Description => "[" + VERSION + "]";
 
-        public static readonly string VERSION = "0.1.0";
+        public static readonly string VERSION = "0.1.1";
         public static readonly string SETTINGS_FILE_NAME = "HealkitMod";
         public static readonly string HARMONY_STRING = "strad.healkitMod.v1";
 
